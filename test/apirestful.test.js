@@ -31,8 +31,8 @@ describe("Pruebas funcionales Productos API", () => {
     const productToSave = {
       title: "test",
       brand: "test",
-      price: 000,
-      stock: 000,
+      price: 97,
+      stock: 97,
       thumbnail: ""
     } 
 
@@ -46,5 +46,38 @@ describe("Pruebas funcionales Productos API", () => {
     assert.strictEqual(resp.status, 200);
   });
 
-  //AGREGAR VERIFICACION CON CHAI
+  it("Retornar status 409 al intentar agregar un producto ya existente", async () => {
+    const productToSave = {
+      title: "Galaxy S22",
+      brand: "test",
+      price: 99,
+      stock: 99,
+      thumbnail: ""
+    } 
+
+    let resp;
+
+    resp = await supertestClient
+      .post("/api/productos/save")
+      .send(productToSave)
+    ;
+
+    assert.strictEqual(resp.status, 409);
+  })
+
+  it("Eliminar un producto por ID", async () => {
+
+    //DOCUMENTO (PROD) CREADO PREVIAMENTE CON LA FINALIDAD DE SER ELIMINADO POR EL TEST.
+    const ID = "6451b58ce8e9304837b7db36"    
+
+    let resp;
+
+    resp = await supertestClient
+      .delete(`/api/productos/delete/${ID}`)
+    ;
+
+    assert.strictEqual(resp.status, 200);
+  
+  })
+
 })

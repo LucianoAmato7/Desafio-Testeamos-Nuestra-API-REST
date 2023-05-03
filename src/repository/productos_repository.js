@@ -17,6 +17,10 @@ class productos_repository{
         return addedProd
     }
 
+    async delete(id){
+        const deletedProd = await this.productosDAO.DeleteProd(id)
+        return deletedProd
+    }
 }
 
 export default new productos_repository()

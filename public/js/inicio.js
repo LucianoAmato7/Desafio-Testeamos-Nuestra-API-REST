@@ -4,10 +4,26 @@ saveProd.addEventListener("click", (e) => {
   AddProducto();
 });
 
+async function DeleteProd(id){
+  console.log("DeleteProd ejecutada");
+  
+  try{
+    await fetch(`http://localhost:8080/api/productos/delete/${id}`, {
+      method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(() => {
+      ViewProds();
+    })
+  }catch(error){
+    console.log(error);
+  }
+}
+
 async function ViewProds() {
   console.log("ViewProds ejecutada");
   try {
-    fetch("http://localhost:8080/api/productos")
+    await fetch("http://localhost:8080/api/productos")
     .then(response => response.json())
     .then(data => {
       const productos = data;
@@ -30,10 +46,25 @@ async function ViewProds() {
                             <td class="align-middle">
                                 <img src=${prod.thumbnail} style="width: 80px">
                             </td>
+                            <td>
+                              <img src="./images/icon-trash.png" clas="" id="_${prod._id}">
+                            </td>
                         </tr>`
                     )}
                 </table>
             </div>`;
+
+            productos.forEach(prod => {
+
+              let btnDeleteProd = document.getElementById(`_${prod._id}`);
+  
+              btnDeleteProd.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                DeleteProd(`${prod._id}`);
+              });
+            })
+        
       } else {
         document.getElementById("vistaContainer").innerHTML =
           '<h3 class="alert alert-danger">No se encontraron productos</h3>';
